@@ -5,7 +5,7 @@ StudyMate is an AI-powered study assistant that helps students turn lecture note
 
 ## 🚀 Live Demo
 
-**[Open StudyMate](https://studymate-ai.pages.dev)**
+**[Open StudyMate](https://6234160c.aistudymate.pages.dev)**
 
 ## ✨ Features
 
