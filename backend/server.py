@@ -40,8 +40,7 @@ PyObjectId = Annotated[str, BeforeValidator(str)]
 
 
 class UserPublic(BaseModel):
-    model_config = ConfigDict(populate_by_name=True)
-    id: PyObjectId = Field(alias="_id")
+    id: PyObjectId
     email: str
     name: str
     created_at: Optional[str] = None
@@ -178,7 +177,7 @@ async def register(body: RegisterBody, response: Response):
     res = await db.users.insert_one(doc)
     token = create_access_token(str(res.inserted_id), email)
     set_auth_cookie(response, token)
-    return UserPublic(_id=str(res.inserted_id), email=email, name=doc["name"], created_at=doc["created_at"])
+    return UserPublic(id=str(res.inserted_id), email=email, name=doc["name"], created_at=doc["created_at"])
 
 
 @api_router.post("/auth/login", response_model=UserPublic)
@@ -189,7 +188,7 @@ async def login(body: LoginBody, response: Response):
         raise HTTPException(status_code=401, detail="Incorrect email or password.")
     token = create_access_token(str(user["_id"]), email)
     set_auth_cookie(response, token)
-    return UserPublic(_id=str(user["_id"]), email=user["email"], name=user["name"], created_at=user.get("created_at"))
+    return UserPublic(id=str(user["_id"]), email=user["email"], name=user["name"], created_at=user.get("created_at"))
 
 
 @api_router.post("/auth/logout")
@@ -200,7 +199,7 @@ async def logout(response: Response):
 
 @api_router.get("/auth/me", response_model=UserPublic)
 async def me(user: dict = Depends(get_current_user)):
-    return UserPublic(_id=str(user["_id"]), email=user["email"], name=user["name"], created_at=user.get("created_at"))
+    return UserPublic(id=str(user["_id"]), email=user["email"], name=user["name"], created_at=user.get("created_at"))
 
 
 # ---------------- Generation routes ----------------

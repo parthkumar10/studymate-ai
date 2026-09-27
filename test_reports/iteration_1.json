@@ -1,0 +1,36 @@
+{
+  "summary": "Full E2E backend + frontend testing of StudyMate. Backend auth, generate, ownership 404, empty-input 400 all working. Frontend: signup->dashboard, login, protected routes redirect, load sample + char counter, empty-input rejection, duplicate-submit prevention (button disabled during loading), summary/flashcards/quiz generation with real Claude Sonnet 4.6 calls, flashcard flip/next/prev/master controls, quiz answer/score/retry, recent history, detail view + view-original-notes accordion + back, history search + filter (summary/flashcards/quiz/all) + delete with confirm, cross-user ownership blocked (404 -> 'Generation not found.'), logout all pass.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/auth/login and /api/auth/me", "issue": "Response leaks MongoDB internal '_id' field in user object. Should exclude _id and only return {id,email,name,created_at} or wrap as {user:{...}}. Currently the user document is returned at the root of the login response (not under a 'user' key) which also deviates from convention."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/backend_test.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "Backend: exclude MongoDB '_id' from user responses in /api/auth/login and /api/auth/me (return only {id,email,name,created_at}).",
+    "Optional consistency: review_request lists flashcard test-ids as flip-button/next-button/prev-button/master-button, but code uses flashcard-flip-button/flashcard-next-button/flashcard-prev-button/flashcard-master-button. Either update spec or rename testids for external test parity."
+  ],
+  "critical_code_review_comments": [
+    "User document sent to client contains raw Mongo '_id' string. Serialize via a Pydantic model that excludes _id.",
+    "Auth login response shape returns user fields at root; typical shape is {user:{...}} or {user, token}. Frontend AuthContext appears to handle it, but external consumers may expect a wrapped shape."
+  ],
+  "updated_files": [
+    "/app/backend/tests/backend_test.py"
+  ],
+  "success_rate": {"backend": "86% (6/7 pytest; 1 was strict on response shape)", "frontend": "100% (all 12 review-request items verified)"},
+  "test_credentials": "student@test.com/study123 and userb@test.com/study123 (both work)",
+  "seed_data_creation": "Generated 3 study items (summary/flashcards/quiz) for student@test.com via UI during testing; deleted 1 via UI. userb@test.com used only for ownership isolation check.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "All 12 requested E2E flows pass with real Claude calls. Flashcard testids in code are prefixed 'flashcard-' (flashcard-flip-button, flashcard-next-button, flashcard-prev-button, flashcard-master-button, flashcard-front, flashcard-back). The only backend finding is Mongo _id leak in the user object returned by /api/auth/login and /api/auth/me; if fixed, tighten the pytest assertion in TestAuth.test_login_existing_user to expect 'id' (not '_id') and no '_id' key.",
+  "rca of the issue": "Login/Me endpoint likely returns the raw dict fetched from MongoDB (users.find_one) without projection. Fix: project {'_id':0} in the query or map to a Pydantic response model that excludes _id."
+}
