@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { api, formatApiError } from "@/lib/api";
 import { AppShell, TYPE_META, formatDate } from "@/components/AppShell";
 import { ResultDisplay } from "@/components/ResultDisplay";
+import { ExportButton } from "@/components/ExportButton";
 import { ArrowLeft, Loader2, AlertCircle, FileText, ChevronDown } from "lucide-react";
 import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
@@ -34,7 +35,7 @@ export default function GenerationDetail() {
         <button
           onClick={() => navigate("/history")}
           data-testid="back-to-history-button"
-          className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-primary transition-colors mb-6"
+          className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-primary transition-colors mb-6"
         >
           <ArrowLeft className="w-4 h-4" /> Back to history
         </button>
@@ -46,7 +47,7 @@ export default function GenerationDetail() {
         ) : error ? (
           <div
             data-testid="detail-error"
-            className="flex items-start gap-3 text-[#DC2626] bg-[#FEF2F2] border border-[#fecaca] rounded-xl px-4 py-3"
+            className="flex items-start gap-3 text-[#DC2626] bg-[#FEF2F2] border border-[#fecaca] dark:text-[#fca5a5] dark:bg-[#3a1d1d] dark:border-[#7f1d1d] rounded-xl px-4 py-3"
           >
             <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
             <p className="text-sm">{error}</p>
@@ -59,22 +60,25 @@ export default function GenerationDetail() {
                   <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${TYPE_META[gen.type].chip}`}>
                     {TYPE_META[gen.type].label}
                   </span>
-                  <span className="text-sm text-slate-400">{formatDate(gen.created_at)}</span>
+                  <span className="text-sm text-muted-foreground/70">{formatDate(gen.created_at)}</span>
                 </div>
-                <h1 className="font-serif text-2xl sm:text-3xl text-slate-900 tracking-tight leading-snug">
+                <h1 className="font-serif text-2xl sm:text-3xl text-foreground tracking-tight leading-snug">
                   {gen.title}
                 </h1>
+                <div className="mt-4">
+                  <ExportButton type={gen.type} title={gen.title} result={gen.result} />
+                </div>
               </div>
 
-              <Accordion type="single" collapsible className="bg-white rounded-2xl border border-border px-5">
+              <Accordion type="single" collapsible className="bg-card rounded-2xl border border-border px-5">
                 <AccordionItem value="notes" className="border-none">
                   <AccordionTrigger data-testid="view-original-notes" className="hover:no-underline py-4">
-                    <span className="flex items-center gap-2 text-slate-700 font-medium">
-                      <FileText className="w-4 h-4 text-slate-400" /> View original notes
+                    <span className="flex items-center gap-2 text-foreground/90 font-medium">
+                      <FileText className="w-4 h-4 text-muted-foreground/70" /> View original notes
                     </span>
                   </AccordionTrigger>
                   <AccordionContent>
-                    <p className="whitespace-pre-wrap text-sm text-slate-600 leading-relaxed pb-2">
+                    <p className="whitespace-pre-wrap text-sm text-muted-foreground leading-relaxed pb-2">
                       {gen.input_text}
                     </p>
                   </AccordionContent>

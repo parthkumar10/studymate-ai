@@ -9,6 +9,12 @@ import History from "@/pages/History";
 import GenerationDetail from "@/pages/GenerationDetail";
 import { Loader2 } from "lucide-react";
 
+try {
+  if (localStorage.getItem("studymate-theme") === "dark") {
+    document.documentElement.classList.add("dark");
+  }
+} catch (_) {}
+
 function PublicOnly({ children }) {
   const { user } = useAuth();
   if (user === null) {

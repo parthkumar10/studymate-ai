@@ -37,6 +37,27 @@ code, .font-mono {
         --ring: 141 30% 30%;
         --radius: 0.75rem;
     }
+    .dark {
+        --background: 222 22% 11%;
+        --foreground: 40 24% 92%;
+        --card: 222 18% 15%;
+        --card-foreground: 40 24% 92%;
+        --popover: 222 18% 15%;
+        --popover-foreground: 40 24% 92%;
+        --primary: 141 34% 52%;
+        --primary-foreground: 222 30% 10%;
+        --secondary: 222 14% 20%;
+        --secondary-foreground: 40 24% 92%;
+        --muted: 222 14% 20%;
+        --muted-foreground: 220 12% 64%;
+        --accent: 141 22% 22%;
+        --accent-foreground: 141 44% 80%;
+        --destructive: 0 62% 52%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 222 14% 24%;
+        --input: 222 14% 24%;
+        --ring: 141 34% 52%;
+    }
 }
 
 @layer base {
@@ -54,6 +75,10 @@ code, .font-mono {
 ::selection {
     background: #d7e6db;
     color: #24402c;
+}
+.dark ::selection {
+    background: #2d4e37;
+    color: #eaf2ec;
 }
 
 .perspective-1000 {

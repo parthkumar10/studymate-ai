@@ -62,20 +62,20 @@ export default function History() {
     <AppShell>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-6">
-          <h1 className="font-serif text-3xl sm:text-4xl text-slate-900 tracking-tight">History</h1>
-          <p className="text-slate-500 mt-2">Revisit everything you've generated.</p>
+          <h1 className="font-serif text-3xl sm:text-4xl text-foreground tracking-tight">History</h1>
+          <p className="text-muted-foreground mt-2">Revisit everything you've generated.</p>
         </div>
 
         {/* Search + filters */}
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           <div className="relative flex-1">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/70" />
             <input
               data-testid="history-search-input"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search by keyword or topic…"
-              className="w-full h-11 pl-10 pr-4 rounded-xl border border-input bg-white text-slate-800 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition"
+              className="w-full h-11 pl-10 pr-4 rounded-xl border border-input bg-card text-foreground outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition"
             />
           </div>
           <div className="flex gap-1.5 overflow-x-auto">
@@ -85,7 +85,7 @@ export default function History() {
                 data-testid={f.testid}
                 onClick={() => setFilter(f.id)}
                 className={`px-3.5 h-11 rounded-xl text-sm font-medium whitespace-nowrap transition-colors ${
-                  filter === f.id ? "bg-primary text-primary-foreground" : "bg-white border border-border text-slate-600 hover:bg-secondary"
+                  filter === f.id ? "bg-primary text-primary-foreground" : "bg-card border border-border text-muted-foreground hover:bg-secondary"
                 }`}
               >
                 {f.label}
@@ -100,13 +100,13 @@ export default function History() {
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-16" data-testid="history-empty">
-            <span className="inline-grid place-items-center w-14 h-14 rounded-2xl bg-secondary text-slate-400 mb-4">
+            <span className="inline-grid place-items-center w-14 h-14 rounded-2xl bg-secondary text-muted-foreground/70 mb-4">
               <Inbox className="w-7 h-7" />
             </span>
-            <p className="text-slate-600 font-medium">
+            <p className="text-muted-foreground font-medium">
               {items.length === 0 ? "Nothing here yet" : "No matches found"}
             </p>
-            <p className="text-slate-400 text-sm mt-1">
+            <p className="text-muted-foreground/70 text-sm mt-1">
               {items.length === 0 ? "Generate your first study material from the dashboard." : "Try a different search or filter."}
             </p>
           </div>
@@ -119,28 +119,28 @@ export default function History() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: Math.min(i * 0.03, 0.3) }}
                 data-testid="history-item-card"
-                className="bg-white rounded-2xl border border-border p-4 sm:p-5 flex items-center gap-4 hover:border-primary/30 transition-colors"
+                className="bg-card rounded-2xl border border-border p-4 sm:p-5 flex items-center gap-4 hover:border-primary/30 transition-colors"
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2.5 mb-1.5">
                     <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${TYPE_META[g.type].chip}`}>
                       {TYPE_META[g.type].label}
                     </span>
-                    <span className="text-xs text-slate-400">{formatDate(g.created_at)}</span>
+                    <span className="text-xs text-muted-foreground/70">{formatDate(g.created_at)}</span>
                   </div>
-                  <p className="text-slate-700 line-clamp-1">{g.preview || g.title}</p>
+                  <p className="text-foreground/90 line-clamp-1">{g.preview || g.title}</p>
                 </div>
                 <button
                   data-testid="history-item-open-button"
                   onClick={() => navigate(`/generation/${g.id}`)}
-                  className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-secondary text-slate-700 text-sm font-medium hover:bg-accent transition-colors shrink-0"
+                  className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-secondary text-foreground/90 text-sm font-medium hover:bg-accent transition-colors shrink-0"
                 >
                   Open <ArrowRight className="w-4 h-4" />
                 </button>
                 <button
                   data-testid="history-item-delete-button"
                   onClick={() => setToDelete(g)}
-                  className="grid place-items-center w-9 h-9 rounded-lg text-slate-400 hover:text-[#DC2626] hover:bg-[#FEF2F2] transition-colors shrink-0"
+                  className="grid place-items-center w-9 h-9 rounded-lg text-muted-foreground/70 hover:text-[#DC2626] hover:bg-[#FEF2F2] dark:hover:bg-[#3a1d1d] transition-colors shrink-0"
                   aria-label="Delete"
                 >
                   <Trash2 className="w-4 h-4" />

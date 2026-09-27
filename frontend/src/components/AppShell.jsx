@@ -1,9 +1,11 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
-import { BookOpenText, History, LayoutDashboard, LogOut } from "lucide-react";
+import { useTheme } from "@/hooks/useTheme";
+import { BookOpenText, History, LayoutDashboard, LogOut, Moon, Sun } from "lucide-react";
 
 export function AppShell({ children }) {
   const { user, logout } = useAuth();
+  const { theme, toggle } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -25,7 +27,7 @@ export function AppShell({ children }) {
             <span className="grid place-items-center w-9 h-9 rounded-xl bg-primary text-primary-foreground shadow-sm transition-transform group-hover:-translate-y-0.5">
               <BookOpenText className="w-5 h-5" />
             </span>
-            <span className="font-serif text-xl font-semibold tracking-tight text-slate-900">StudyMate</span>
+            <span className="font-serif text-xl font-semibold tracking-tight text-foreground">StudyMate</span>
           </Link>
 
           <nav className="flex items-center gap-1 sm:gap-2">
@@ -38,7 +40,7 @@ export function AppShell({ children }) {
                   to={item.to}
                   data-testid={item.testid}
                   className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    active ? "bg-accent text-accent-foreground" : "text-slate-600 hover:bg-secondary"
+                    active ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:bg-secondary"
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -47,13 +49,21 @@ export function AppShell({ children }) {
               );
             })}
             <div className="mx-1 sm:mx-2 h-6 w-px bg-border" />
-            <span className="hidden md:inline text-sm text-slate-500 max-w-[140px] truncate" data-testid="nav-user-name">
+            <button
+              onClick={toggle}
+              data-testid="theme-toggle-button"
+              aria-label="Toggle dark mode"
+              className="grid place-items-center w-9 h-9 rounded-lg text-muted-foreground hover:bg-secondary transition-colors"
+            >
+              {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
+            <span className="hidden md:inline text-sm text-muted-foreground max-w-[140px] truncate" data-testid="nav-user-name">
               {user?.name}
             </span>
             <button
               onClick={handleLogout}
               data-testid="logout-button"
-              className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-secondary transition-colors"
+              className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary transition-colors"
             >
               <LogOut className="w-4 h-4" />
               <span className="hidden sm:inline">Sign out</span>

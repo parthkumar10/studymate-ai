@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { api, formatApiError } from "@/lib/api";
 import { AppShell, TYPE_META, formatDate } from "@/components/AppShell";
 import { ResultDisplay } from "@/components/ResultDisplay";
+import { ExportButton } from "@/components/ExportButton";
 import {
   FileText, Layers, HelpCircle, Sparkles, Loader2, AlertCircle,
   RotateCw, Clock, ArrowRight, FilePlus2,
@@ -73,17 +74,17 @@ export default function Dashboard() {
     <AppShell>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="font-serif text-3xl sm:text-4xl text-slate-900 tracking-tight">Your study workspace</h1>
-          <p className="text-slate-500 mt-2">Paste your lecture notes, pick an action, and let StudyMate do the rest.</p>
+          <h1 className="font-serif text-3xl sm:text-4xl text-foreground tracking-tight">Your study workspace</h1>
+          <p className="text-muted-foreground mt-2">Paste your lecture notes, pick an action, and let StudyMate do the rest.</p>
         </div>
 
         <div className="grid grid-cols-12 gap-6">
           {/* Main workspace */}
           <div className="col-span-12 lg:col-span-8 space-y-6">
             {/* Note input */}
-            <div className="bg-white rounded-2xl border border-border p-5 sm:p-6">
+            <div className="bg-card rounded-2xl border border-border p-5 sm:p-6">
               <div className="flex items-center justify-between mb-3">
-                <label className="font-serif text-xl text-slate-900">Lecture notes</label>
+                <label className="font-serif text-xl text-foreground">Lecture notes</label>
                 <button
                   onClick={() => setText(SAMPLE)}
                   data-testid="sample-note-button"
@@ -97,19 +98,19 @@ export default function Dashboard() {
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 placeholder="Paste or type your class notes here…"
-                className="w-full min-h-[260px] resize-y rounded-xl border border-input bg-background/50 p-4 text-slate-800 leading-relaxed outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition"
+                className="w-full min-h-[260px] resize-y rounded-xl border border-input bg-background/50 p-4 text-foreground leading-relaxed outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition"
               />
               <div className="flex items-center justify-between mt-2 text-sm">
-                <span className={over ? "text-[#DC2626] font-medium" : "text-slate-400"} data-testid="char-counter">
+                <span className={over ? "text-[#DC2626] font-medium" : "text-muted-foreground/70"} data-testid="char-counter">
                   {text.length.toLocaleString()} / {MAX_CHARS.toLocaleString()} characters
                 </span>
-                <span className="text-slate-400">{trimmedLen > 0 ? `${text.trim().split(/\s+/).length} words` : ""}</span>
+                <span className="text-muted-foreground/70">{trimmedLen > 0 ? `${text.trim().split(/\s+/).length} words` : ""}</span>
               </div>
             </div>
 
             {/* Action selector */}
             <div>
-              <p className="font-mono text-xs uppercase tracking-wider text-slate-500 mb-3">Choose an action</p>
+              <p className="font-mono text-xs uppercase tracking-wider text-muted-foreground mb-3">Choose an action</p>
               <div className="grid sm:grid-cols-3 gap-3">
                 {ACTIONS.map((a) => {
                   const active = action === a.id;
@@ -122,18 +123,18 @@ export default function Dashboard() {
                       className={`text-left rounded-2xl border p-4 transition-all ${
                         active
                           ? "border-primary bg-accent ring-4 ring-primary/10 -translate-y-0.5"
-                          : "border-border bg-white hover:border-primary/40 hover:-translate-y-0.5"
+                          : "border-border bg-card hover:border-primary/40 hover:-translate-y-0.5"
                       }`}
                     >
                       <span
                         className={`grid place-items-center w-9 h-9 rounded-lg mb-3 ${
-                          active ? "bg-primary text-primary-foreground" : "bg-secondary text-slate-600"
+                          active ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground"
                         }`}
                       >
                         <Icon className="w-5 h-5" />
                       </span>
-                      <p className="font-semibold text-slate-900">{a.label}</p>
-                      <p className="text-sm text-slate-500 mt-0.5">{a.desc}</p>
+                      <p className="font-semibold text-foreground">{a.label}</p>
+                      <p className="text-sm text-muted-foreground mt-0.5">{a.desc}</p>
                     </button>
                   );
                 })}
@@ -161,7 +162,7 @@ export default function Dashboard() {
             {error && (
               <div
                 data-testid="generate-error"
-                className="flex items-start gap-3 text-[#DC2626] bg-[#FEF2F2] border border-[#fecaca] rounded-xl px-4 py-3"
+                className="flex items-start gap-3 text-[#DC2626] bg-[#FEF2F2] border border-[#fecaca] dark:text-[#fca5a5] dark:bg-[#3a1d1d] dark:border-[#7f1d1d] rounded-xl px-4 py-3"
               >
                 <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
                 <div className="flex-1">
@@ -175,7 +176,7 @@ export default function Dashboard() {
 
             {/* Loading skeleton */}
             {loading && (
-              <div className="bg-white rounded-2xl border border-border p-6 animate-pulse space-y-3">
+              <div className="bg-card rounded-2xl border border-border p-6 animate-pulse space-y-3">
                 <div className="h-4 bg-secondary rounded w-1/3" />
                 <div className="h-3 bg-secondary rounded w-full" />
                 <div className="h-3 bg-secondary rounded w-5/6" />
@@ -191,11 +192,14 @@ export default function Dashboard() {
                   animate={{ opacity: 1, y: 0 }}
                   data-testid="result-view-container"
                 >
-                  <div className="flex items-center gap-2.5 mb-4">
+                  <div className="flex items-center gap-2.5 mb-4 flex-wrap">
                     <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${TYPE_META[result.type].chip}`}>
                       {TYPE_META[result.type].label}
                     </span>
-                    <span className="font-serif text-2xl text-slate-900">Result</span>
+                    <span className="font-serif text-2xl text-foreground">Result</span>
+                    <div className="ml-auto">
+                      <ExportButton type={result.type} title={result.title} result={result.result} />
+                    </div>
                   </div>
                   <ResultDisplay type={result.type} result={result.result} />
                 </motion.div>
@@ -205,10 +209,10 @@ export default function Dashboard() {
 
           {/* Recent history sidebar */}
           <aside className="col-span-12 lg:col-span-4">
-            <div className="bg-white rounded-2xl border border-border p-5 sm:p-6 lg:sticky lg:top-24">
+            <div className="bg-card rounded-2xl border border-border p-5 sm:p-6 lg:sticky lg:top-24">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="font-serif text-xl text-slate-900 flex items-center gap-2">
-                  <Clock className="w-5 h-5 text-slate-400" /> Recent
+                <h2 className="font-serif text-xl text-foreground flex items-center gap-2">
+                  <Clock className="w-5 h-5 text-muted-foreground/70" /> Recent
                 </h2>
                 <button onClick={() => navigate("/history")} className="text-sm text-primary font-medium hover:underline">
                   View all
@@ -216,7 +220,7 @@ export default function Dashboard() {
               </div>
 
               {recent.length === 0 ? (
-                <p className="text-sm text-slate-400 py-6 text-center" data-testid="recent-empty">
+                <p className="text-sm text-muted-foreground/70 py-6 text-center" data-testid="recent-empty">
                   Your generations will appear here.
                 </p>
               ) : (
@@ -232,10 +236,10 @@ export default function Dashboard() {
                           <span className={`px-2 py-0.5 rounded-full text-[11px] font-semibold ${TYPE_META[g.type].chip}`}>
                             {TYPE_META[g.type].label}
                           </span>
-                          <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-primary transition-colors" />
+                          <ArrowRight className="w-4 h-4 text-muted-foreground/40 group-hover:text-primary transition-colors" />
                         </div>
-                        <p className="text-sm text-slate-700 line-clamp-2 leading-snug">{g.preview || g.title}</p>
-                        <p className="text-xs text-slate-400 mt-1.5">{formatDate(g.created_at)}</p>
+                        <p className="text-sm text-foreground/90 line-clamp-2 leading-snug">{g.preview || g.title}</p>
+                        <p className="text-xs text-muted-foreground/70 mt-1.5">{formatDate(g.created_at)}</p>
                       </button>
                     </li>
                   ))}

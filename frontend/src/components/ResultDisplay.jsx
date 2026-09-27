@@ -37,7 +37,7 @@ function SummaryView({ result }) {
         <button
           onClick={copyAll}
           data-testid="copy-summary-button"
-          className="flex items-center gap-2 px-3.5 py-2 rounded-lg border border-border bg-white text-sm font-medium text-slate-700 hover:bg-secondary transition-colors"
+          className="flex items-center gap-2 px-3.5 py-2 rounded-lg border border-border bg-card text-sm font-medium text-foreground/90 hover:bg-secondary transition-colors"
         >
           {copied ? <Check className="w-4 h-4 text-primary" /> : <Copy className="w-4 h-4" />}
           {copied ? "Copied" : "Copy summary"}
@@ -45,7 +45,7 @@ function SummaryView({ result }) {
       </div>
 
       <Section icon={Sparkles} title="Overview">
-        <p className="text-slate-700 leading-relaxed text-[1.05rem]">{result?.overview}</p>
+        <p className="text-foreground/90 leading-relaxed text-[1.05rem]">{result?.overview}</p>
       </Section>
 
       {concepts.length > 0 && (
@@ -64,7 +64,7 @@ function SummaryView({ result }) {
         <Section icon={ListChecks} title="Key points">
           <ul className="space-y-2.5">
             {keyPoints.map((p, i) => (
-              <li key={i} className="flex gap-3 text-slate-700 leading-relaxed">
+              <li key={i} className="flex gap-3 text-foreground/90 leading-relaxed">
                 <span className="mt-2 w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
                 <span>{p}</span>
               </li>
@@ -78,12 +78,12 @@ function SummaryView({ result }) {
 
 function Section({ icon: Icon, title, children }) {
   return (
-    <div className="bg-white rounded-2xl border border-border p-5 sm:p-6">
+    <div className="bg-card rounded-2xl border border-border p-5 sm:p-6">
       <div className="flex items-center gap-2.5 mb-4">
         <span className="grid place-items-center w-8 h-8 rounded-lg bg-accent text-accent-foreground">
           <Icon className="w-4 h-4" />
         </span>
-        <h3 className="font-serif text-xl text-slate-900">{title}</h3>
+        <h3 className="font-serif text-xl text-foreground">{title}</h3>
       </div>
       {children}
     </div>
@@ -109,10 +109,10 @@ function FlashcardsView({ result }) {
   return (
     <div data-testid="flashcard-container" className="space-y-5">
       <div className="flex items-center justify-between text-sm">
-        <span className="font-mono uppercase tracking-wider text-slate-500">
+        <span className="font-mono uppercase tracking-wider text-muted-foreground">
           Card {index + 1} of {cards.length}
         </span>
-        <span className="text-slate-500">{masteredCount} mastered</span>
+        <span className="text-muted-foreground">{masteredCount} mastered</span>
       </div>
 
       <div className="perspective-1000">
@@ -126,11 +126,11 @@ function FlashcardsView({ result }) {
         >
           <div
             data-testid="flashcard-front"
-            className="absolute inset-0 backface-hidden rounded-2xl border border-border bg-white p-8 flex flex-col items-center justify-center text-center shadow-sm"
+            className="absolute inset-0 backface-hidden rounded-2xl border border-border bg-card p-8 flex flex-col items-center justify-center text-center shadow-sm"
           >
-            <span className="font-mono text-xs uppercase tracking-wider text-slate-400 mb-4">Question</span>
-            <p className="font-serif text-2xl sm:text-3xl text-slate-900 leading-snug">{card.question}</p>
-            <span className="mt-6 text-sm text-slate-400 flex items-center gap-1.5">
+            <span className="font-mono text-xs uppercase tracking-wider text-muted-foreground/70 mb-4">Question</span>
+            <p className="font-serif text-2xl sm:text-3xl text-foreground leading-snug">{card.question}</p>
+            <span className="mt-6 text-sm text-muted-foreground/70 flex items-center gap-1.5">
               <RotateCw className="w-3.5 h-3.5" /> Tap to reveal
             </span>
           </div>
@@ -149,7 +149,7 @@ function FlashcardsView({ result }) {
           onClick={() => go(-1)}
           disabled={index === 0}
           data-testid="flashcard-prev-button"
-          className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-border bg-white text-sm font-medium text-slate-700 hover:bg-secondary transition-colors disabled:opacity-40"
+          className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-border bg-card text-sm font-medium text-foreground/90 hover:bg-secondary transition-colors disabled:opacity-40"
         >
           <ChevronLeft className="w-4 h-4" /> Prev
         </button>
@@ -160,7 +160,7 @@ function FlashcardsView({ result }) {
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${
             mastered[index]
               ? "bg-primary text-primary-foreground"
-              : "border border-border bg-white text-slate-700 hover:bg-secondary"
+              : "border border-border bg-card text-foreground/90 hover:bg-secondary"
           }`}
         >
           <CheckCircle2 className="w-4 h-4" />
@@ -171,7 +171,7 @@ function FlashcardsView({ result }) {
           onClick={() => go(1)}
           disabled={index === cards.length - 1}
           data-testid="flashcard-next-button"
-          className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-border bg-white text-sm font-medium text-slate-700 hover:bg-secondary transition-colors disabled:opacity-40"
+          className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-border bg-card text-sm font-medium text-foreground/90 hover:bg-secondary transition-colors disabled:opacity-40"
         >
           Next <ChevronRight className="w-4 h-4" />
         </button>
@@ -203,16 +203,16 @@ function QuizView({ result }) {
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           data-testid="quiz-score-card"
-          className="bg-white rounded-2xl border border-primary/25 p-6 flex items-center gap-4"
+          className="bg-card rounded-2xl border border-primary/25 p-6 flex items-center gap-4"
         >
           <span className="grid place-items-center w-14 h-14 rounded-2xl bg-accent text-accent-foreground">
             <Trophy className="w-7 h-7" />
           </span>
           <div className="flex-1">
-            <p className="font-serif text-2xl text-slate-900">
+            <p className="font-serif text-2xl text-foreground">
               You scored {score} / {questions.length}
             </p>
-            <p className="text-slate-500 text-sm">
+            <p className="text-muted-foreground text-sm">
               {score === questions.length ? "Perfect — you've got this!" : "Review the explanations below and try again."}
             </p>
           </div>
@@ -227,20 +227,20 @@ function QuizView({ result }) {
       )}
 
       {questions.map((q, qi) => (
-        <div key={qi} data-testid="quiz-question-item" className="bg-white rounded-2xl border border-border p-5 sm:p-6">
-          <p className="font-medium text-slate-900 mb-4 leading-relaxed">
-            <span className="font-mono text-sm text-slate-400 mr-2">{qi + 1}.</span>
+        <div key={qi} data-testid="quiz-question-item" className="bg-card rounded-2xl border border-border p-5 sm:p-6">
+          <p className="font-medium text-foreground mb-4 leading-relaxed">
+            <span className="font-mono text-sm text-muted-foreground/70 mr-2">{qi + 1}.</span>
             {q.question}
           </p>
           <div className="space-y-2.5">
             {q.options.map((opt, oi) => {
               const selected = answers[qi] === oi;
               const isCorrect = q.correct_index === oi;
-              let cls = "border-border bg-white hover:bg-secondary";
+              let cls = "border-border bg-card hover:bg-secondary";
               if (submitted) {
                 if (isCorrect) cls = "border-primary bg-accent";
-                else if (selected && !isCorrect) cls = "border-[#fecaca] bg-[#FEF2F2]";
-                else cls = "border-border bg-white opacity-70";
+                else if (selected && !isCorrect) cls = "border-[#fecaca] bg-[#FEF2F2] dark:border-[#7f1d1d] dark:bg-[#3a1d1d]";
+                else cls = "border-border bg-card opacity-70";
               } else if (selected) {
                 cls = "border-primary bg-accent";
               }
@@ -250,7 +250,7 @@ function QuizView({ result }) {
                   disabled={submitted}
                   onClick={() => setAnswers((a) => ({ ...a, [qi]: oi }))}
                   data-testid="quiz-option-button"
-                  className={`w-full text-left px-4 py-3 rounded-xl border text-slate-700 transition-colors flex items-center justify-between gap-3 ${cls}`}
+                  className={`w-full text-left px-4 py-3 rounded-xl border text-foreground/90 transition-colors flex items-center justify-between gap-3 ${cls}`}
                 >
                   <span>{opt}</span>
                   {submitted && isCorrect && <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />}
@@ -266,8 +266,8 @@ function QuizView({ result }) {
                 animate={{ opacity: 1, height: "auto" }}
                 className="overflow-hidden"
               >
-                <p className="mt-4 text-sm text-slate-600 bg-secondary rounded-lg px-3.5 py-3 leading-relaxed">
-                  <span className="font-semibold text-slate-700">Why: </span>
+                <p className="mt-4 text-sm text-muted-foreground bg-secondary rounded-lg px-3.5 py-3 leading-relaxed">
+                  <span className="font-semibold text-foreground/90">Why: </span>
                   {q.explanation}
                 </p>
               </motion.div>
@@ -291,5 +291,5 @@ function QuizView({ result }) {
 }
 
 function Empty({ text }) {
-  return <div className="text-center text-slate-500 py-10">{text}</div>;
+  return <div className="text-center text-muted-foreground py-10">{text}</div>;
 }

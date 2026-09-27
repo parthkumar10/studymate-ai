@@ -84,13 +84,13 @@ export default function AuthPage({ mode }) {
             <span className="grid place-items-center w-9 h-9 rounded-xl bg-primary text-primary-foreground">
               <BookOpenText className="w-5 h-5" />
             </span>
-            <span className="font-serif text-xl font-semibold text-slate-900">StudyMate</span>
+            <span className="font-serif text-xl font-semibold text-foreground">StudyMate</span>
           </div>
 
-          <h2 className="font-serif text-3xl text-slate-900 tracking-tight">
+          <h2 className="font-serif text-3xl text-foreground tracking-tight">
             {isSignup ? "Create your account" : "Welcome back"}
           </h2>
-          <p className="text-slate-500 mt-2 mb-8">
+          <p className="text-muted-foreground mt-2 mb-8">
             {isSignup ? "Start turning notes into study material." : "Sign in to continue studying."}
           </p>
 
@@ -130,7 +130,7 @@ export default function AuthPage({ mode }) {
             {error && (
               <div
                 data-testid="auth-error"
-                className="text-sm text-[#DC2626] bg-[#FEF2F2] border border-[#fecaca] rounded-lg px-3 py-2.5"
+                className="text-sm text-[#DC2626] bg-[#FEF2F2] border border-[#fecaca] dark:text-[#fca5a5] dark:bg-[#3a1d1d] dark:border-[#7f1d1d] rounded-lg px-3 py-2.5"
               >
                 {error}
               </div>
@@ -147,7 +147,7 @@ export default function AuthPage({ mode }) {
             </button>
           </form>
 
-          <p className="text-center text-sm text-slate-500 mt-6">
+          <p className="text-center text-sm text-muted-foreground mt-6">
             {isSignup ? "Already have an account?" : "New to StudyMate?"}{" "}
             <Link
               to={isSignup ? "/login" : "/signup"}
@@ -164,7 +164,7 @@ export default function AuthPage({ mode }) {
       <style>{`
         .input-field {
           width: 100%; height: 3rem; padding: 0 0.9rem; border-radius: 0.75rem;
-          border: 1px solid hsl(var(--input)); background: #fff; color: hsl(var(--foreground));
+          border: 1px solid hsl(var(--input)); background: hsl(var(--card)); color: hsl(var(--foreground));
           outline: none; transition: border-color .15s, box-shadow .15s; font-size: 0.95rem;
         }
         .input-field:focus { border-color: hsl(var(--primary)); box-shadow: 0 0 0 3px rgba(59,99,70,.12); }
@@ -177,7 +177,7 @@ export default function AuthPage({ mode }) {
 function Field({ label, children }) {
   return (
     <label className="block">
-      <span className="block text-sm font-medium text-slate-700 mb-1.5">{label}</span>
+      <span className="block text-sm font-medium text-foreground/90 mb-1.5">{label}</span>
       {children}
     </label>
   );
