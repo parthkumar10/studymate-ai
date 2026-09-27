@@ -1,0 +1,184 @@
+{
+  "project_info": {
+    "name": "StudyMate",
+    "app_type": "saas_app",
+    "target_audience": "College students turning raw lecture/class notes into summaries, flashcards, or quiz questions",
+    "tech_stack": {
+      "frontend": "React js (.js / .jsx files), Tailwind CSS, Lucide icons, Framer Motion, Shadcn UI primitives",
+      "backend": "FastAPI (Python)",
+      "ai_engine": "Claude Sonnet 4.6"
+    }
+  },
+  "design_archetype": {
+    "name": "Organic, Calm & Paper-Warm Focus",
+    "description": "Distraction-free, paper-like warmth, serene study space aesthetics. Soft linen backgrounds, warm stone card borders, sage green accents, tactile typography.",
+    "emotional_tone": "Focused, calming, reassuring, scholarly yet modern and approachable",
+    "anti_patterns": [
+      "NO high-saturation futuristic glowing neon grids",
+      "NO heavy dark mode sci-fi tech gradients",
+      "NO cramped textareas or hidden input boxes",
+      "NO missing data-testid attributes",
+      "NO Inter/Space Grotesk for primary headings"
+    ]
+  },
+  "typography": {
+    "font_family": {
+      "headings": "Lora, Newsreader, or Playfair Display, serif",
+      "body": "Plus Jakarta Sans, DM Sans, or Work Sans, sans-serif",
+      "mono": "JetBrains Mono, monospace"
+    },
+    "hierarchy": {
+      "h1": "text-3xl sm:text-4xl lg:text-5xl font-serif tracking-tight text-slate-900 leading-tight",
+      "h2": "text-2xl sm:text-3xl font-serif text-slate-900 tracking-tight",
+      "h3": "text-xl sm:text-2xl font-serif text-slate-800",
+      "h4": "text-lg font-sans font-semibold text-slate-800",
+      "body": "text-base text-slate-700 leading-relaxed font-sans",
+      "caption": "text-xs font-mono uppercase tracking-wider text-slate-500"
+    }
+  },
+  "colors": {
+    "theme": "Light & Calm Warm Neutral",
+    "palette": {
+      "background_page": "#FBF9F5",
+      "background_card": "#FFFFFF",
+      "background_muted": "#F4F0EA",
+      "border_subtle": "#E6E1DA",
+      "border_focus": "#4A7C59",
+      "text_primary": "#1E293B",
+      "text_secondary": "#64748B",
+      "text_muted": "#94A3B8",
+      "brand_primary": "#3B6346",
+      "brand_primary_hover": "#2D4E37",
+      "brand_light": "#EAF2EC",
+      "accent_amber": "#D97706",
+      "accent_amber_light": "#FEF3C7",
+      "accent_sky": "#0284C7",
+      "accent_sky_light": "#E0F2FE",
+      "error_red": "#DC2626",
+      "error_bg": "#FEF2F2"
+    }
+  },
+  "layout_and_spacing": {
+    "philosophy": "Generous breathing space. The note input and generated study materials dominate the viewport.",
+    "container_padding": "p-4 sm:p-6 lg:p-8",
+    "grid_structure": "Dashboard uses asymmetric focus layout: Left dominant main workspace (col-span-12 lg:col-span-8), Right contextual sidebar / recent history (col-span-12 lg:col-span-4).",
+    "max_width": "max-w-7xl mx-auto"
+  },
+  "screens": {
+    "auth": {
+      "components": ["Sign-up Form", "Login Form"],
+      "elements": [
+        "Brand header with StudyMate logo and tag line ('Turn raw notes into exam-ready knowledge')",
+        "Email + Password fields with clean focus states and validation",
+        "Toggle between Login and Sign-up mode",
+        "Clear data-testid on submit buttons and input fields"
+      ]
+    },
+    "dashboard": {
+      "components": ["Note Input Textarea", "AI Action Selector", "Generate Button", "Recent Generation History Widget"],
+      "elements": [
+        "Prominent Large Note Input Textarea (min-h-[260px]) with character/word counter and quick sample note loader button",
+        "Action Selector Tabs/Cards for 1. Summarise Notes, 2. Flashcards, 3. Quiz Questions",
+        "Primary Action Button: 'Generate Study Material' with glowing sage focus border & smooth spinner on active loading state",
+        "Recent Generation History drawer/panel showing last 5 creations with action badge and timestamp"
+      ]
+    },
+    "result_view": {
+      "summary_view": "Structured executive summary, Key Concepts list with tag pills, Detailed Bulleted Breakdown, Actionable Takeaways, Copy & Export buttons",
+      "flashcards_view": "Interactive 3D Flip Cards (Front: Question/Term, Back: Answer/Explanation) with Previous/Next controls, Flip button, Progress tracker (Card X of Y), Mastered / Needs Review flags",
+      "quiz_view": "Interactive Multiple-Choice Questions, Choice selection with instantaneous tactile visual feedback, Check Answer mode, Explanations for correct/incorrect choices, Final Score Card with Retry option"
+    },
+    "history": {
+      "components": ["History List", "Search & Filter Bar", "Action Type Pills", "Delete Dialog"],
+      "elements": [
+        "Filter by Action Type (All, Summaries, Flashcards, Quizzes)",
+        "Search input for filtering notes by keyword/topic",
+        "Card list with date created, title preview, action badge, quick delete button",
+        "Clicking item navigates to Previous-Generation Detail View"
+      ]
+    },
+    "detail_view": {
+      "elements": [
+        "Full view of saved generation result",
+        "Source note viewer accordion / drawer ('View original raw notes')",
+        "Re-generate / Modify action options",
+        "Back to History / Back to Dashboard navigation button"
+      ]
+    }
+  },
+  "motion_and_interactions": {
+    "framer_motion_usage": "Smooth entrance transitions, card flip rotation (rotateY 180deg), tab indicator animation",
+    "micro_interactions": "Hover elevation (-translate-y-0.5), subtle border tint on focus, pulse loading state during AI text streaming",
+    "flip_card_spec": "3D perspective container with perspective-1000, transition-transform duration-500 backface-hidden"
+  },
+  "data_testid_requirements": {
+    "auth": [
+      "login-email-input",
+      "login-password-input",
+      "login-submit-button",
+      "signup-email-input",
+      "signup-password-input",
+      "signup-name-input",
+      "signup-submit-button",
+      "auth-toggle-button"
+    ],
+    "dashboard": [
+      "note-textarea",
+      "action-selector-summary",
+      "action-selector-flashcards",
+      "action-selector-quiz",
+      "sample-note-button",
+      "generate-button",
+      "recent-history-list",
+      "recent-history-item"
+    ],
+    "results": [
+      "result-view-container",
+      "summary-content",
+      "copy-summary-button",
+      "flashcard-container",
+      "flashcard-front",
+      "flashcard-back",
+      "flashcard-flip-button",
+      "flashcard-next-button",
+      "flashcard-prev-button",
+      "flashcard-master-button",
+      "quiz-container",
+      "quiz-question-item",
+      "quiz-option-button",
+      "quiz-submit-button",
+      "quiz-score-card",
+      "quiz-retry-button"
+    ],
+    "history": [
+      "history-search-input",
+      "history-filter-all",
+      "history-filter-summary",
+      "history-filter-flashcards",
+      "history-filter-quiz",
+      "history-item-card",
+      "history-item-open-button",
+      "history-item-delete-button"
+    ]
+  },
+  "image_urls": [
+    {
+      "category": "hero_student_illustration",
+      "url": "https://images.unsplash.com/photo-1516042438821-0abd7a73c4b3?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "usage": "Calm student library scene for onboarding/auth hero header"
+    },
+    {
+      "category": "study_ambiance",
+      "url": "https://images.unsplash.com/photo-1769650796306-a33851729b73?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "usage": "Library background image for login banner"
+    }
+  ],
+  "instructions_to_main_agent": [
+    "Strictly follow the light calm warm neutral design system described in this JSON.",
+    "Implement full mock AI generation engine powered by backend/frontend API using Claude Sonnet 4.6 context simulation.",
+    "Ensure all interactive items have data-testid attributes for testing.",
+    "Support key functionalities: Auth (Email/Password), Note Input, 3 AI Actions (Summarise, Flashcards, Quiz), Detailed Results, History view with search/filter/delete, Detail view.",
+    "Do not import TS or TSX files since codebase uses .js / .jsx.",
+    "Include responsive layout with smooth mobile navigation and flashcard gestures."
+  ]
+}
