@@ -37,11 +37,13 @@ College student turning lecture/class notes into summaries, flashcards, or quizz
 - Verified: full backend curl + testing agent E2E (12/12 frontend flows pass)
 
 ## Backlog (not yet built)
-- P1: Export/download study material (PDF/Markdown)
 - P1: Regenerate a saved generation with a different action
 - P2: Edit/rename saved generations
-- P2: Dark mode
 - P2: Keyboard shortcuts for flashcard review
+
+## Enhancements (2026-09-27)
+- PDF export: "Download PDF" on Dashboard result + Detail view (jsPDF, clean text layout) — verified
+- Dark mode: calm night theme with header toggle, persisted in localStorage — verified
 
 ## Next Tasks
 - Await user feedback on V1

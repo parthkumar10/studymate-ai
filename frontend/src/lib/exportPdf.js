@@ -78,7 +78,7 @@ export function exportGenerationPdf({ type, title, result }) {
     (result?.questions || []).forEach((q, i) => {
       write(`${i + 1}. ${q.question}`, { style: "bold", gap: 4 });
       (q.options || []).forEach((opt, oi) => {
-        const marker = oi === q.correct_index ? "[✓] " : "[ ] ";
+        const marker = oi === q.correct_index ? "(correct) " : "( ) ";
         write(marker + opt, { color: oi === q.correct_index ? SAGE : DARK, gap: 1, indent: 8 });
       });
       if (q.explanation) write("Why: " + q.explanation, { size: 10, color: GREY, gap: 12, indent: 8 });
