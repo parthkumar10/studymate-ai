@@ -35,8 +35,16 @@ export default function Dashboard() {
   const [recent, setRecent] = useState([]);
 
   const loadRecent = useCallback(() => {
-    api.get("/generations").then((res) => setRecent(res.data.slice(0, 5))).catch(() => {});
-  }, []);
+  api
+    .get("/generations")
+    .then((res) => {
+      const data = Array.isArray(res.data) ? res.data : [];
+      setRecent(data.slice(0, 5));
+    })
+    .catch(() => {
+      setRecent([]);
+    });
+}, []);
 
   useEffect(() => {
     loadRecent();
