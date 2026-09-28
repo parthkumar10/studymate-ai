@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/hooks/useTheme";
 import { BookOpenText, History, LayoutDashboard, LogOut, Moon, Sun } from "lucide-react";
+import { AiSettingsDialog } from "@/components/AiSettingsDialog";
 
 export function AppShell({ children }) {
   const { user, logout } = useAuth();
@@ -49,6 +50,7 @@ export function AppShell({ children }) {
               );
             })}
             <div className="mx-1 sm:mx-2 h-6 w-px bg-border" />
+            <AiSettingsDialog />
             <button
               onClick={toggle}
               data-testid="theme-toggle-button"
