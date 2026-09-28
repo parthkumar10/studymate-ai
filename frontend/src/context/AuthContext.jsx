@@ -9,23 +9,38 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     api
       .get("/auth/me")
-      .then((res) => setUser(res.data))
+      .then((res) => {
+        if (res.data && typeof res.data === "object" && res.data.id) {
+          setUser(res.data);
+        } else {
+          setUser(false);
+        }
+      })
       .catch(() => setUser(false));
   }, []);
 
   const login = useCallback(async (email, password) => {
     const res = await api.post("/auth/login", { email, password });
+    if (res.data?.token) {
+      localStorage.setItem("studymate_token", res.data.token);
+    }
     setUser(res.data);
   }, []);
 
   const register = useCallback(async (name, email, password) => {
     const res = await api.post("/auth/register", { name, email, password });
+    if (res.data?.token) {
+      localStorage.setItem("studymate_token", res.data.token);
+    }
     setUser(res.data);
   }, []);
 
   const logout = useCallback(async () => {
     try {
       await api.post("/auth/logout");
+    } catch (_) {}
+    try {
+      localStorage.removeItem("studymate_token");
     } catch (_) {}
     setUser(false);
   }, []);

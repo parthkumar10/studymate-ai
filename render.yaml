@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: studymate-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: MONGO_URL
+        sync: false
+      - key: DB_NAME
+        value: studymate
+      - key: JWT_SECRET
+        generateValue: true
+      - key: EMERGENT_LLM_KEY
+        sync: false
+      - key: FRONTEND_URL
+        value: https://6234160c.aistudymate.pages.dev

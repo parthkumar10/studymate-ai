@@ -23,13 +23,15 @@ from emergentintegrations.llm.chat import LlmChat, UserMessage
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger("studymate")
 
-mongo_url = os.environ["MONGO_URL"]
+mongo_url = os.environ.get("MONGO_URL", "mongodb://localhost:27017")
 client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ["DB_NAME"]]
+db = client[os.environ.get("DB_NAME", "studymate")]
 
-JWT_SECRET = os.environ["JWT_SECRET"]
+JWT_SECRET = os.environ.get("JWT_SECRET", "studymate-secret-key-production-change-me")
 JWT_ALGORITHM = "HS256"
-EMERGENT_LLM_KEY = os.environ["EMERGENT_LLM_KEY"]
+EMERGENT_LLM_KEY = os.environ.get("EMERGENT_LLM_KEY", "")
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
 MAX_NOTE_CHARS = int(os.environ.get("MAX_NOTE_CHARS", "8000"))
 
 app = FastAPI()
@@ -44,6 +46,7 @@ class UserPublic(BaseModel):
     email: str
     name: str
     created_at: Optional[str] = None
+    token: Optional[str] = None
 
 
 class RegisterBody(BaseModel):
@@ -153,13 +156,47 @@ def _extract_json(text: str) -> dict:
 
 
 async def run_ai(gen_type: str, input_text: str) -> dict:
-    chat = LlmChat(
-        api_key=EMERGENT_LLM_KEY,
-        session_id=f"studymate-{gen_type}",
-        system_message=SYSTEM_PROMPTS[gen_type],
-    ).with_model("anthropic", "claude-sonnet-4-6")
-    resp = await chat.send_message(UserMessage(text=input_text))
-    return _extract_json(resp if isinstance(resp, str) else str(resp))
+    if EMERGENT_LLM_KEY:
+        chat = LlmChat(
+            api_key=EMERGENT_LLM_KEY,
+            session_id=f"studymate-{gen_type}",
+            system_message=SYSTEM_PROMPTS[gen_type],
+        ).with_model("anthropic", "claude-sonnet-4-6")
+        resp = await chat.send_message(UserMessage(text=input_text))
+        return _extract_json(resp if isinstance(resp, str) else str(resp))
+    elif GEMINI_API_KEY:
+        import asyncio
+        import requests
+        prompt = f"{SYSTEM_PROMPTS[gen_type]}\n\nStudent lecture notes:\n{input_text}"
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
+        payload = {"contents": [{"parts": [{"text": prompt}]}]}
+        def _call_gemini():
+            res = requests.post(url, json=payload, timeout=45)
+            res.raise_for_status()
+            return res.json()["candidates"][0]["content"]["parts"][0]["text"]
+        raw = await asyncio.to_thread(_call_gemini)
+        return _extract_json(raw)
+    elif OPENAI_API_KEY:
+        import asyncio
+        import requests
+        url = "https://api.openai.com/v1/chat/completions"
+        headers = {"Authorization": f"Bearer {OPENAI_API_KEY}", "Content-Type": "application/json"}
+        payload = {
+            "model": "gpt-4o-mini",
+            "messages": [
+                {"role": "system", "content": SYSTEM_PROMPTS[gen_type]},
+                {"role": "user", "content": input_text},
+            ],
+            "response_format": {"type": "json_object"},
+        }
+        def _call_openai():
+            res = requests.post(url, headers=headers, json=payload, timeout=45)
+            res.raise_for_status()
+            return res.json()["choices"][0]["message"]["content"]
+        raw = await asyncio.to_thread(_call_openai)
+        return _extract_json(raw)
+    else:
+        raise ValueError("No AI API key found. Set EMERGENT_LLM_KEY, GEMINI_API_KEY, or OPENAI_API_KEY in environment variables.")
 
 
 # ---------------- Auth routes ----------------
@@ -177,7 +214,7 @@ async def register(body: RegisterBody, response: Response):
     res = await db.users.insert_one(doc)
     token = create_access_token(str(res.inserted_id), email)
     set_auth_cookie(response, token)
-    return UserPublic(id=str(res.inserted_id), email=email, name=doc["name"], created_at=doc["created_at"])
+    return UserPublic(id=str(res.inserted_id), email=email, name=doc["name"], created_at=doc["created_at"], token=token)
 
 
 @api_router.post("/auth/login", response_model=UserPublic)
@@ -188,7 +225,7 @@ async def login(body: LoginBody, response: Response):
         raise HTTPException(status_code=401, detail="Incorrect email or password.")
     token = create_access_token(str(user["_id"]), email)
     set_auth_cookie(response, token)
-    return UserPublic(id=str(user["_id"]), email=user["email"], name=user["name"], created_at=user.get("created_at"))
+    return UserPublic(id=str(user["_id"]), email=user["email"], name=user["name"], created_at=user.get("created_at"), token=token)
 
 
 @api_router.post("/auth/logout")
@@ -297,9 +334,15 @@ async def root():
 
 app.include_router(api_router)
 
+frontend_env = os.environ.get("FRONTEND_URL", "http://localhost:3000")
+allowed_origins = [url.strip().rstrip("/") for url in frontend_env.split(",") if url.strip()]
+if "http://localhost:3000" not in allowed_origins:
+    allowed_origins.append("http://localhost:3000")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[os.environ.get("FRONTEND_URL", "http://localhost:3000")],
+    allow_origins=allowed_origins,
+    allow_origin_regex=r"https:\/\/.*\.pages\.dev",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
